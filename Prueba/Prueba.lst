@@ -1,0 +1,14 @@
+     1                                  section .data
+     2                                  
+     3                                  section .bss
+     4 00000000 <res 00000008>          	prueba resq 1
+     5                                  section .text
+     6                                  global main
+     7                                  main:
+     8 00000000 55                      	push rbp
+     9 00000001 4889E5                  	mov rbp, rsp
+    10 00000004 B90A000000              	mov rcx, 0xa
+    11 00000009 48890C25[00000000]      	mov [prueba], rcx 
+    12 00000011 4889EC                  	mov rsp, rbp ;leave
+    13 00000014 5D                      	pop rbp
+    14 00000015 C3                      ret

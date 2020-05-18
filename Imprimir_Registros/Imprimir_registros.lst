@@ -1,0 +1,74 @@
+     1                                  section .data
+     2 00000000 48656C6C6F20576F72-     	message: db "Hello World!", 0xA,0
+     2 00000009 6C64210A00         
+     3                                  	message_length equ $-message-1 
+     4                                  	
+     5                                  section .bss
+     6                                  	;integer resq 1
+     7 00000000 <res 00000064>          	digitSpace resb 100
+     8 00000064 <res 00000008>          	digitSpacePos resq 1
+     9                                  
+    10                                  section .text
+    11                                  global main
+    12                                  main:
+    13 00000000 55                      	push rbp
+    14 00000001 4889E5                  	mov rbp, rsp
+    15 00000004 B839300000              	mov rax, 12345
+    16 00000009 E810000000              	call _print
+    17                                  	;LEA RBX, [integer]	;carga la direccion de "integer" a RBX
+    18                                  	;MOV QWORD [RBX], 32
+    19                                  	;MOV RBX, 5
+    20                                  	;MOV RAX, 0x1		;Write Syscall
+    21                                  	;MOV RDI, 0X1		;Usa STDout
+    22                                  	;MOV RSI, integer   ;imprime contenido
+    23                                  	;MOV RDX, 1			;sizeof
+    24                                  	;Syscall				;ejecuta syscall
+    25                                  	
+    26                                  	;MOV RAX, 0x1
+    27                                  	;mov rdi, 0x1
+    28                                  	;mov rsi, message
+    29                                  	;mov rdx, message_length
+    30                                  	;Syscall
+    31                                  	
+    32 0000000E B83C000000              	MOV RAX, 60			;Sys_exit syscall
+    33 00000013 BF00000000              	MOV RDI, 0			;Salir sin errores
+    34 00000018 0F05                    	Syscall
+    35 0000001A 4889EC                  	mov rsp, rbp ;leave
+    36 0000001D 5D                      	pop rbp
+    37                                  
+    38                                  _print:
+    39 0000001E 488D0C25[00000000]      	lea rcx, [digitSpace]
+    40 00000026 BB0A000000              	mov rbx, 0xa
+    41 0000002B 488919                  	mov [rcx], rbx
+    42 0000002E 48FFC1                  	inc rcx
+    43 00000031 48890C25[64000000]      	mov[digitSpacePos], rcx
+    44                                  	
+    45                                  _printLoop:
+    46 00000039 BA00000000              	mov rdx, 0
+    47 0000003E BB0A000000              	mov rbx, 0xa
+    48 00000043 48F7F3                  	div rbx
+    49 00000046 50                      	push rax
+    50 00000047 4883C230                	add rdx, 48		;ASCII character std
+    51 0000004B 488B0C25[64000000]      	mov rcx, [digitSpacePos]
+    52 00000053 8811                    	mov [rcx], dl
+    53 00000055 48FFC1                  	inc rcx
+    54 00000058 48890C25[64000000]      	mov [digitSpacePos], rcx
+    55 00000060 58                      	pop rax
+    56 00000061 4883F800                	cmp rax, 0
+    57 00000065 75D2                    	jne _printLoop
+    58                                  	
+    59                                  _printLoop2:
+    60 00000067 488B0C25[64000000]      	mov rcx, [digitSpacePos]
+    61 0000006F B801000000              	mov rax, 1
+    62 00000074 BF01000000              	mov rdi, 1
+    63 00000079 4889CE                  	mov rsi, rcx
+    64 0000007C BA01000000              	mov rdx, 1
+    65 00000081 0F05                    	Syscall
+    66                                  	
+    67 00000083 488B0C25[64000000]      	mov rcx, [digitSpacePos]
+    68 0000008B 48FFC9                  	dec rcx
+    69 0000008E 48890C25[64000000]      	mov [digitSpacePos], rcx
+    70                                  	
+    71 00000096 4881F9[00000000]        	cmp rcx, digitSpace
+    72 0000009D 7DC8                    	jge _printLoop2
+    73 0000009F C3                      ret

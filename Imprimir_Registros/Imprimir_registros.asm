@@ -5,14 +5,14 @@ section .data
 section .bss
 	;integer resq 1
 	digitSpace resb 100
-	digitSpacePos resb 8
+	digitSpacePos resq 1
 
 section .text
 global main
 main:
-	;push rbp
-	;mov rbp, rsp
-	mov rax, 10
+	push rbp
+	mov rbp, rsp
+	mov rax, 12345
 	call _print
 	;LEA RBX, [integer]	;carga la direccion de "integer" a RBX
 	;MOV QWORD [RBX], 32
@@ -32,11 +32,11 @@ main:
 	MOV RAX, 60			;Sys_exit syscall
 	MOV RDI, 0			;Salir sin errores
 	Syscall
-	;mov rsp, rbp ;leave
-	;pop rbp
+	mov rsp, rbp ;leave
+	pop rbp
 
 _print:
-	mov rcx, digitSpace
+	lea rcx, [digitSpace]
 	mov rbx, 0xa
 	mov [rcx], rbx
 	inc rcx
