@@ -1,14 +1,21 @@
      1                                  section .data
-     2                                  
-     3                                  section .bss
-     4 00000000 <res 00000008>          	prueba resq 1
-     5                                  section .text
-     6                                  global main
-     7                                  main:
-     8 00000000 55                      	push rbp
-     9 00000001 4889E5                  	mov rbp, rsp
-    10 00000004 B90A000000              	mov rcx, 0xa
-    11 00000009 48890C25[00000000]      	mov [prueba], rcx 
-    12 00000011 4889EC                  	mov rsp, rbp ;leave
-    13 00000014 5D                      	pop rbp
-    14 00000015 C3                      ret
+     2 00000000 FF28FF                  	var1 db 255,40,255
+     3 00000003 41                      	var2 db 65
+     4                                  section .bss
+     5 00000000 <res 00000008>          	prueba resq 1
+     6                                  section .text
+     7                                  global main
+     8                                  
+     9                                  main:
+    10 00000000 55                      	push rbp
+    11 00000001 4889E5                  	mov rbp, rsp
+    12                                  	
+    13 00000004 4831DB                  	xor rbx, rbx
+    14 00000007 4831C9                  	xor rcx, rcx
+    15 0000000A 488D1C25[00000000]      	lea rbx, [var1]
+    16 00000012 488B4B01                	mov rcx, [rbx+1]
+    17 00000016 8A0C25[03000000]        	mov cl, [var2]
+    18                                  	
+    19 0000001D 4889EC                  	mov rsp, rbp ;leave
+    20 00000020 5D                      	pop rbp
+    21 00000021 C3                      ret
