@@ -13,8 +13,10 @@ main:
 	xor rbx, rbx
 	xor rcx, rcx
 	lea rbx, [var1]
-	mov rcx, [rbx+1]
-	mov cl, [var2]
+	lea rcx, [rbx+1]
+	xor rdx, rdx
+	mov dl, [var2]
+	mov [rcx], dl
 	
 	mov rsp, rbp ;leave
 	pop rbp
