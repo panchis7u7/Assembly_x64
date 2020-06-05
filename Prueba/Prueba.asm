@@ -7,6 +7,7 @@ section .data
 	PROT_EXEC equ 0x4
 	PROT_NONE equ 0x0
 	MAP_PRIVATE equ 0x2
+	MAP_ANONYMOUS equ 0x20
 	
 section .bss
 	prueba resq 1
@@ -17,24 +18,26 @@ global main
 main:
 	push rbp
 	mov rbp, rsp
-	
+	xor rax, rax
 	xor rbx, rbx
 	xor rcx, rcx
-	lea rbx, [var1]
-	lea rcx, [rbx+1]
-	xor rdx, rdx
-	mov dl, [var2]
-	mov [rcx], dl
+	;lea rbx, [var1]
+	;lea rcx, [rbx+1]
+	;xor rdx, rdx
+	;mov dl, [var2]
+	;mov [rcx], dl
 	
 	;Prueba MMAP
-	mov rax, 9				;mmap syscall no.
-	mov rdi, 0				;hint 
-	mov rsi, 4096			;page size
-	mov rdx, PROT_READ		;Read-only memory
-	mov r10, MAP_PRIVATE	;no shared pages
-	mov r8, 0 				;no file descriptor
-	mov r9, 0				;no offset
-	int 0x80
+	mov rax, 9								;mmap syscall no.
+	mov rdi, 0								;hint 
+	mov rsi, 4096							;page size
+	mov rdx, PROT_READ | PROT_WRITE			;Read and write memory
+	mov r10, MAP_PRIVATE | MAP_ANONYMOUS	;no shared pages
+	mov r8, 0 								;no file descriptor
+	mov r9, 0								;no offset
+	syscall
+	
+	mov [rax], byte 0xff
 	
 	mov rsp, rbp ;leave
 	pop rbp

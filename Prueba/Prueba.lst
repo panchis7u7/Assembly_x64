@@ -7,35 +7,38 @@
      7                                  	PROT_EXEC equ 0x4
      8                                  	PROT_NONE equ 0x0
      9                                  	MAP_PRIVATE equ 0x2
-    10                                  	
-    11                                  section .bss
-    12 00000000 <res 00000008>          	prueba resq 1
-    13                                  	
-    14                                  section .text
-    15                                  global main
-    16                                    
-    17                                  main:
-    18 00000000 55                      	push rbp
-    19 00000001 4889E5                  	mov rbp, rsp
-    20                                  	
-    21 00000004 4831DB                  	xor rbx, rbx
-    22 00000007 4831C9                  	xor rcx, rcx
-    23 0000000A 488D1C25[00000000]      	lea rbx, [var1]
-    24 00000012 488D4B01                	lea rcx, [rbx+1]
-    25 00000016 4831D2                  	xor rdx, rdx
-    26 00000019 8A1425[03000000]        	mov dl, [var2]
-    27 00000020 8811                    	mov [rcx], dl
-    28                                  	
-    29                                  	;Prueba MMAP
-    30 00000022 B809000000              	mov rax, 9				;mmap syscall no.
-    31 00000027 BF00000000              	mov rdi, 0				;hint 
-    32 0000002C BE00100000              	mov rsi, 4096			;page size
-    33 00000031 BA01000000              	mov rdx, PROT_READ		;Read-only memory
-    34 00000036 41BA02000000            	mov r10, MAP_PRIVATE	;no shared pages
-    35 0000003C 41B800000000            	mov r8, 0 				;no file descriptor
-    36 00000042 41B900000000            	mov r9, 0				;no offset
-    37 00000048 CD80                    	int 0x80
-    38                                  	
-    39 0000004A 4889EC                  	mov rsp, rbp ;leave
-    40 0000004D 5D                      	pop rbp
-    41 0000004E C3                      ret
+    10                                  	MAP_ANONYMOUS equ 0x20
+    11                                  	
+    12                                  section .bss
+    13 00000000 <res 00000008>          	prueba resq 1
+    14                                  	
+    15                                  section .text
+    16                                  global main
+    17                                    
+    18                                  main:
+    19 00000000 55                      	push rbp
+    20 00000001 4889E5                  	mov rbp, rsp
+    21 00000004 4831C0                  	xor rax, rax
+    22 00000007 4831DB                  	xor rbx, rbx
+    23 0000000A 4831C9                  	xor rcx, rcx
+    24                                  	;lea rbx, [var1]
+    25                                  	;lea rcx, [rbx+1]
+    26                                  	;xor rdx, rdx
+    27                                  	;mov dl, [var2]
+    28                                  	;mov [rcx], dl
+    29                                  	
+    30                                  	;Prueba MMAP
+    31 0000000D B809000000              	mov rax, 9								;mmap syscall no.
+    32 00000012 BF00000000              	mov rdi, 0								;hint 
+    33 00000017 BE00100000              	mov rsi, 4096							;page size
+    34 0000001C BA03000000              	mov rdx, PROT_READ | PROT_WRITE			;Read and write memory
+    35 00000021 41BA22000000            	mov r10, MAP_PRIVATE | MAP_ANONYMOUS	;no shared pages
+    36 00000027 41B800000000            	mov r8, 0 								;no file descriptor
+    37 0000002D 41B900000000            	mov r9, 0								;no offset
+    38 00000033 0F05                    	syscall
+    39                                  	
+    40 00000035 C600FF                  	mov [rax], byte 0xff
+    41                                  	
+    42 00000038 4889EC                  	mov rsp, rbp ;leave
+    43 0000003B 5D                      	pop rbp
+    44 0000003C C3                      ret
