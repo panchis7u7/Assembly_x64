@@ -14,20 +14,6 @@ main:
 	mov rbp, rsp
 	mov rax, 12345
 	call _print
-	;LEA RBX, [integer]	;carga la direccion de "integer" a RBX
-	;MOV QWORD [RBX], 32
-	;MOV RBX, 5
-	;MOV RAX, 0x1		;Write Syscall
-	;MOV RDI, 0X1		;Usa STDout
-	;MOV RSI, integer   ;imprime contenido
-	;MOV RDX, 1			;sizeof
-	;Syscall				;ejecuta syscall
-	
-	;MOV RAX, 0x1
-	;mov rdi, 0x1
-	;mov rsi, message
-	;mov rdx, message_length
-	;Syscall
 	
 	MOV RAX, 60			;Sys_exit syscall
 	MOV RDI, 0			;Salir sin errores
