@@ -1,6 +1,8 @@
 #makefile
+#gcc -nostdlib -nostartfiles -Wl,--entry=main -o Prueba.out Prueba.o -no-pie
 Prueba: Prueba.o
-	gcc -o Prueba Prueba.o -no-pie
+	gcc -o Prueba.out Prueba.o -no-pie
 Prueba.o: Prueba.asm
-	nasm -f elf64 -g -F dwarf Prueba.asm -l Prueba.lst
-
+	nasm -felf64 -g Prueba.asm -l Prueba.lst
+clean:
+	rm -f Prueba.lst Prueba.o Prueba
