@@ -15,8 +15,7 @@ main:
     push rbp
     mov rbp,rsp	
 
-    mov rsi, ok_msg
-    call print
+    mov rsi, qword ok_msg
 
     mov rsp,rbp
     pop rbp
